@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<ui:composition template="_template.xhtml">
+	
+
+		<ui:define name="titulo">
+			<p:outputPanel>Nova Marca</p:outputPanel>
+		</ui:define>
+
+		<ui:define name="conteudo">
+			<h:form id="marca">
+				<p:fieldset legend="Dados da Marca">
+					<h:panelGrid columns="3">
+
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome" value="#{marcaBean.marca.nome}"
+							required="true">
+							<f:validateLength minimum="3" />
+							<f:ajax event="blur" render="messageNome" />
+						</p:inputText>
+						<p:message for="nome" id="messageNome" />
+						
+						<p:outputLabel value="Descrição:" for="descricao" />
+						<p:inputText id="descricao" value="#{marcaBean.marca.descricao}" />
+						<p:message for="descricao" id="messageDescricao" />
+						
+						<p:commandButton value="Gravar" action="#{marcaBean.gravar}" process="@form" update="@form :formTabelaMarcas" />
+					</h:panelGrid>
+				</p:fieldset>
+			</h:form>
+			
+			<h:form id="formTabelaMarcas">
+			<p:dataList value="#{marcaBean.marcas}" var="marca" type="definition">
+		        <f:facet name="header">
+		            Marcas
+		        </f:facet>
+		       
+		       <p:commandButton icon="fa fa-fw fa-edit" update=":marca" >
+						<f:setPropertyActionListener value="#{marca}" target="#{marcaBean.marca}" />
+				</p:commandButton>
+		       
+		       <p:commandButton icon="fa fa-fw fa-remove" action="#{marcaBean.remover(marca)}" update="@form"/>
+		       
+		       #{marca.nome}
+		    </p:dataList>
+		
+			</h:form>		
+		</ui:define>
+
+	</ui:composition>
+
+</html>
